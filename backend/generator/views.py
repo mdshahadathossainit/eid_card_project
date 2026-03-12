@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .utils import prepare_user_image
-from .designs import design_1, design_2
+from . import designs
 import uuid
 import os
 from django.conf import settings
@@ -22,12 +22,17 @@ class GenerateCardView(APIView):
 
         processed_user_img = prepare_user_image(temp_path)
         
-        designs = {
-            "1": design_1,
-            "2": design_2,
+        design_map = {
+            "1": designs.design_1, "2": designs.design_2, "3": designs.design_3,
+            "4": designs.design_4, "5": designs.design_5, "6": designs.design_6,
+            "7": designs.design_7, "8": designs.design_8, "9": designs.design_9,
+            "10": designs.design_10, "11": designs.design_11, "12": designs.design_12,
+            "13": designs.design_13, "14": designs.design_14, "15": designs.design_15,
+            "16": designs.design_16, "17": designs.design_17, "18": designs.design_18,
+            "19": designs.design_19, "20": designs.design_20,
         }
         
-        selected_design = designs.get(template_id, design_1)
+        selected_design = design_map.get(template_id, designs.design_1)
         final_card = selected_design(user_name, address, processed_user_img)
         
         output_name = f"eid_card_{uuid.uuid4()}.jpg"
