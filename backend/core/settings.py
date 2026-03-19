@@ -89,3 +89,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.backends.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+PORT = os.environ.get('PORT', '10000')
