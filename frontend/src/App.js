@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+const API_URL = 'https://eid-card-project-backend.onrender.com'; 
 
 function App() {
   const [formData, setFormData] = useState({ name: '', address: '', template_id: '1' });
@@ -12,12 +11,18 @@ function App() {
 
   const handleImage = (e) => {
     const file = e.target.files[0];
-    setImage(file);
-    setPreview(URL.createObjectURL(file));
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!image) {
+      alert("Please upload an image");
+      return;
+    }
     setLoading(true);
     const data = new FormData();
     data.append('name', formData.name);
@@ -26,10 +31,15 @@ function App() {
     data.append('image', image);
 
     try {
-      const response = await axios.post(`${API_URL}/api/generate/`, data);
+      const response = await axios.post(`${API_URL}/api/generate/`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       setResult(response.data.card_url);
     } catch (err) {
-      alert("Error generating card");
+      console.error(err);
+      alert("Error generating card. Check if backend is running.");
     } finally {
       setLoading(false);
     }
@@ -42,13 +52,26 @@ function App() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div className="bg-white p-8 rounded-2xl shadow-xl">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <input type="text" placeholder="Full Name" className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500" onChange={e => setFormData({...formData, name: e.target.value})} required />
-            <input type="text" placeholder="Address" className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500" onChange={e => setFormData({...formData, address: e.target.value})} required />
+            <input 
+              type="text" 
+              placeholder="Full Name" 
+              className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500" 
+              onChange={e => setFormData({...formData, name: e.target.value})} 
+              required 
+            />
+            <input 
+              type="text" 
+              placeholder="Address" 
+              className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500" 
+              onChange={e => setFormData({...formData, address: e.target.value})} 
+              required 
+            />
             
             <div className="grid grid-cols-4 gap-2 h-48 overflow-y-auto border p-4 rounded-lg bg-gray-50">
               {[...Array(20)].map((_, i) => (
                 <button 
-                  key={i} type="button"
+                  key={i} 
+                  type="button"
                   onClick={() => setFormData({...formData, template_id: (i+1).toString()})}
                   className={`p-2 text-xs font-bold rounded border ${formData.template_id === (i+1).toString() ? 'bg-green-600 text-white border-green-700' : 'bg-white text-gray-700'}`}
                 >
@@ -58,11 +81,15 @@ function App() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <input type="file" className="text-sm" onChange={handleImage} required />
+              <input type="file" className="text-sm" onChange={handleImage} accept="image/*" required />
               {preview && <img src={preview} className="w-16 h-16 rounded-full object-cover border-2 border-green-500" alt="Avatar" />}
             </div>
 
-            <button type="submit" className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl shadow-lg transition duration-300" disabled={loading}>
+            <button 
+              type="submit" 
+              className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl shadow-lg transition duration-300 disabled:bg-gray-400" 
+              disabled={loading}
+            >
               {loading ? 'Processing...' : 'Generate High Resolution Card'}
             </button>
           </form>
@@ -73,7 +100,7 @@ function App() {
             <div className="text-center">
               <img src={result} alt="Eid Card" className="rounded-lg shadow-2xl mb-6 border-4 border-gray-100 max-w-full h-auto" />
               <div className="flex space-x-4 justify-center">
-                <a href={result} download className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold">Download JPG</a>
+                <a href={result} target="_blank" rel="noreferrer" download className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold">Download JPG</a>
                 <button onClick={() => window.open(`https://wa.me/?text=Eid Mubarak! Check my card: ${result}`)} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-bold">Share</button>
               </div>
             </div>
