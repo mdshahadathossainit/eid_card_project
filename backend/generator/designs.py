@@ -2,26 +2,18 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 import os
 from django.conf import settings
 
-# ভুল ছিল: 'fonts/SolaimanLipi.ttf'
-# সঠিক: 'fonts', 'SolaimanLipi.ttf'
 FONT_PATH = os.path.join(settings.BASE_DIR, 'fonts', 'SolaimanLipi.ttf')
 
 def get_font(size):
     try:
-        # ফন্ট ফাইলটি লোড করার চেষ্টা করবে
         return ImageFont.truetype(FONT_PATH, size)
     except Exception as e:
-        # যদি ফন্ট না পায়, তবে এরর না দিয়ে ডিফল্ট ফন্ট ব্যবহার করবে যাতে সিস্টেম সচল থাকে
         print(f"Font loading failed: {e}")
         return ImageFont.load_default()
 
 def draw_base(img, u_img, name, addr, n_pos, a_pos, i_pos, n_clr, a_clr):
     draw = ImageDraw.Draw(img)
-    
-    # ইউজার ইমেজ পেস্ট করা (RGBA মাস্ক সহ যাতে ট্রান্সপারেন্সি বজায় থাকে)
     img.paste(u_img, i_pos, u_img)
-    
-    # নাম এবং ঠিকানা ড্র করা
     draw.text(n_pos, name, font=get_font(75), fill=n_clr, anchor="mm")
     draw.text(a_pos, addr, font=get_font(45), fill=a_clr, anchor="mm")
     return img
