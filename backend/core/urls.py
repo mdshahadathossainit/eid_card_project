@@ -1,13 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from django.conf.urls.static import static
-from django.http import HttpResponse
 from django.views.static import serve
+from django.http import HttpResponse
 import os
 
 def home(request):
-    return HttpResponse("Eid Card Generator Backend is Running. Use /api/generate/ for POST requests.")
+    return HttpResponse("Eid Card Backend is Running!")
 
 urlpatterns = [
     path('', home),
