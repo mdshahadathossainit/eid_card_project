@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 const API_URL = 'https://eid-card-project.onrender.com';
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
       setResult(response.data.card_url);
     } catch (err) {
       console.error(err);
-      alert("Error generating card. Check if backend is running.");
+      alert("Error generating card. Make sure the backend is live and the font file exists.");
     } finally {
       setLoading(false);
     }
@@ -48,7 +49,6 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 p-5 md:p-10">
       <h1 className="text-4xl font-bold text-center mb-10 text-green-900">Eid Card Generator 2026</h1>
-      
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div className="bg-white p-8 rounded-2xl shadow-xl">
           <form onSubmit={handleSubmit} className="space-y-6">
