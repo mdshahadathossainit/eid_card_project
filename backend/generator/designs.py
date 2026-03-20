@@ -7,8 +7,7 @@ FONT_PATH = os.path.join(settings.BASE_DIR, 'fonts', 'SolaimanLipi.ttf')
 def get_font(size):
     try:
         return ImageFont.truetype(FONT_PATH, size)
-    except Exception as e:
-        print(f"Font loading failed: {e}")
+    except:
         return ImageFont.load_default()
 
 def draw_base(img, u_img, name, addr, n_pos, a_pos, i_pos, n_clr, a_clr):
