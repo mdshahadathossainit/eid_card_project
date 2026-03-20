@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-const API_URL = 'https://eid-card-project-backend.onrender.com'; 
+const API_URL = 'https://eid-card-project.onrender.com';
 
 function App() {
   const [formData, setFormData] = useState({ name: '', address: '', template_id: '1' });
