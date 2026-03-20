@@ -75,7 +75,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# Updated for Django 5.x
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
